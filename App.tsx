@@ -4,17 +4,19 @@ import {
   StyleSheet,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import SharedTransitionExample from './src/SharedElementTransition';
 import { NavigationContainer } from '@react-navigation/native';
+import SharedTransitionExample from './src/SharedElementTransition';
+import LayoutAnimationListExample from './src/LayoutAnimationList';
 
 function App(): JSX.Element {
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
-        {/* <SafeAreaView style={styles.container}> */}
-          <SharedTransitionExample />
-        {/* </SafeAreaView> */}
+        {/* <SharedTransitionExample /> */}
+        <SafeAreaView style={styles.container}>
+          <LayoutAnimationListExample />
+        </SafeAreaView>
       </NavigationContainer>
     </GestureHandlerRootView>
   );
