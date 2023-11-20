@@ -9,7 +9,8 @@ import { NavigationContainer } from '@react-navigation/native';
 // import LayoutAnimationListExample from './src/LayoutAnimationList';
 // import AnimatableTextExample from './src/AnimatableText';
 // import ColorInterpolationExample from './src/ColorInterpolation';
-import CustomAnimationExample from './src/CustomAnimation';
+// import CustomAnimationExample from './src/CustomAnimation';
+import GestureHandlerWithSkiaExample from './src/GestureHandlerWithSkia';
 
 function App(): JSX.Element {
 
@@ -21,7 +22,8 @@ function App(): JSX.Element {
           {/* <LayoutAnimationListExample /> */}
           {/* <AnimatableTextExample /> */}
           {/* <ColorInterpolationExample /> */}
-          <CustomAnimationExample />
+          {/* <CustomAnimationExample /> */}
+          <GestureHandlerWithSkiaExample />
         </SafeAreaView>
       </NavigationContainer>
     </GestureHandlerRootView>
