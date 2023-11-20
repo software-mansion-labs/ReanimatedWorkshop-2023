@@ -1,24 +1,15 @@
 'use strict';
 import React, { useState } from 'react';
-import { Button, StyleSheet } from 'react-native';
+import { Button, Image, StyleSheet, View, Text } from 'react-native';
 import Animated, {
-  FadeInUp,
   LayoutAnimationConfig,
-  PinwheelIn,
-  PinwheelOut,
   SlideInRight,
   SlideOutLeft,
 } from 'react-native-reanimated';
 
-const digits = [0, 1, 2];
-
 export default function LayoutAnimationListExample() {
-  return <List />;
-}
-
-function List() {
   const [show, setShow] = useState(true);
-  const [data, setData] = useState(digits);
+  const [data, setData] = useState([0, 1, 2]);
 
   return (
     <>
@@ -41,18 +32,22 @@ function List() {
         }
       />
       {show && (
+        <LayoutAnimationConfig skipEntering={true}>
         <Animated.FlatList
-          skipEnteringExitingAnimations
+          // skipEnteringExitingAnimations
           style={styles.container}
           contentContainerStyle={[styles.contentContainer]}
           decelerationRate="fast"
           data={data}
           renderItem={() => <Item />}
         />
+        </LayoutAnimationConfig>
       )}
     </>
   );
 }
+
+const dogAvatar = require('./assets/avatars/dog.png');
 
 function Item() {
   return (
@@ -60,26 +55,13 @@ function Item() {
       entering={SlideInRight.duration(500)}
       exiting={SlideOutLeft}
       style={styles.card}>
-      <Animated.View
-        entering={FadeInUp.duration(1000).delay(500)}
-        style={styles.outerBox}>
-        <LayoutAnimationConfig skipEntering={false}>
-          <Animated.View
-            style={styles.box}
-            entering={PinwheelIn.duration(2000)}
-            exiting={PinwheelOut}
-          />
-        </LayoutAnimationConfig>
-      </Animated.View>
-      <Animated.View
-        entering={FadeInUp.duration(1000).delay(500)}
-        style={styles.outerBox}>
-        <Animated.View
-          style={styles.box}
-          entering={PinwheelIn.duration(2000)}
-          exiting={PinwheelOut}
-        />
-      </Animated.View>
+      <View style={styles.itemContent}>
+        <Image source={dogAvatar} style={styles.avatar} />
+        <View style={styles.description}>
+          <Text style={styles.header}>Name Surname</Text>
+          <Text>Description</Text>
+        </View>
+      </View>
     </Animated.View>
   );
 }
@@ -95,7 +77,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: 330,
-    height: 100,
+    padding: 20,
     backgroundColor: 'white',
     borderRadius: 20,
     borderColor: '#eee',
@@ -104,18 +86,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-  outerBox: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#b58df1',
+  itemContent: {
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 80,
-    borderRadius: 5,
+    flexDirection: 'row',
   },
-  box: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#782aeb',
+  avatar: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    width: 48,
+    height: 48,
   },
+  description: {
+    marginLeft: 15,
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 18,
+  }
 });
