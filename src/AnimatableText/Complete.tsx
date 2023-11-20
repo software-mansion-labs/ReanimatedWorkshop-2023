@@ -1,33 +1,35 @@
+import React from 'react';
 import Animated, {
   useAnimatedProps,
-  useDerivedValue,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { Button, TextInput, StyleSheet, View } from 'react-native';
+import { Button, TextInput, StyleSheet, View, Text } from 'react-native';
 
-import React from 'react';
+function sleep(ms: number) {
+  const now = performance.now();
+  while (performance.now() - now < ms);
+}
+
+function Elephant() {
+  sleep(500);
+  return <Text>I'm the Elephant</Text>;
+}
 
 Animated.addWhitelistedNativeProps({ text: true });
-
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
 export default function AnimatableTextExample() {
-  const ref = React.useRef(0);
-
   const sv = useSharedValue(0);
 
-  const text = useDerivedValue(() => {
-    return Math.round(sv.value * 100).toString();
-  });
-
   const animatedProps = useAnimatedProps(() => {
-    return { text: text.value, defaultValue: text.value };
+    const text = Math.round(sv.value * 100).toString();
+    return { text: text, defaultValue: text };
   });
 
   const handleToggle = () => {
-    ref.current = 1 - ref.current;
-    sv.value = withTiming(ref.current, { duration: 1000 });
+    sv.value = 0;
+    sv.value = withTiming(1, { duration: 1000 });
   };
 
   return (
@@ -36,6 +38,7 @@ export default function AnimatableTextExample() {
         <Button onPress={handleToggle} title="Toggle" />
       </View>
       <AnimatedTextInput animatedProps={animatedProps} style={styles.text} />
+      <Elephant />
     </>
   );
 }

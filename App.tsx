@@ -7,8 +7,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 // import SharedTransitionExample from './src/SharedElementTransition';
 // import LayoutAnimationListExample from './src/LayoutAnimationList';
-// import AnimatableTextExample from './src/AnimatableText';
-import ColorInterpolationExample from './src/ColorInterpolation';
+import AnimatableTextExample from './src/AnimatableText';
+// import ColorInterpolationExample from './src/ColorInterpolation';
 // import CustomAnimationExample from './src/CustomAnimation';
 // import GestureHandlerWithSkiaExample from './src/GestureHandlerWithSkia';
 
@@ -20,8 +20,8 @@ function App(): JSX.Element {
         {/* <SharedTransitionExample /> */}
         <SafeAreaView style={styles.container}>
           {/* <LayoutAnimationListExample /> */}
-          {/* <AnimatableTextExample /> */}
-          <ColorInterpolationExample />
+          <AnimatableTextExample />
+          {/* <ColorInterpolationExample /> */}
           {/* <CustomAnimationExample /> */}
           {/* <GestureHandlerWithSkiaExample /> */}
         </SafeAreaView>
