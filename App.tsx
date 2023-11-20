@@ -4,7 +4,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// import SharedTransitionExample from './src/SharedElementTransition';
+import SharedTransitionExample from './src/SharedElementTransition';
 import { NavigationContainer } from '@react-navigation/native';
 
 function App(): JSX.Element {
@@ -13,7 +13,7 @@ function App(): JSX.Element {
     <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
         {/* <SafeAreaView style={styles.container}> */}
-          {/* <SharedTransitionExample /> */}
+          <SharedTransitionExample />
         {/* </SafeAreaView> */}
       </NavigationContainer>
     </GestureHandlerRootView>
