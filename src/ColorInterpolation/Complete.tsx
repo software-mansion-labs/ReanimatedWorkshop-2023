@@ -3,109 +3,16 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   interpolateColor,
-  isColor,
+  clamp
 } from 'react-native-reanimated';
 import {
   StyleSheet,
-  TextInput,
   View,
-  Text,
   Button,
-  ScrollView,
 } from 'react-native';
 
-import React, { useEffect, useState } from 'react';
-
-function DefaultInterpolation({
-  color1,
-  color2,
-}: {
-  color1: string;
-  color2: string;
-}) {
-  const color = useSharedValue(color1);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: withTiming(color.value, { duration: 500 }),
-    };
-  });
-
-  useEffect(() => {
-    color.value = color1;
-  }, [color, color1]);
-
-  return (
-    <View>
-      <Text>Default:</Text>
-      <View style={styles.colorContainer}>
-        <Animated.View style={[styles.bigbox, animatedStyle]} />
-        <Button
-          onPress={() => {
-            color.value = color2;
-          }}
-          title="run animation"
-        />
-      </View>
-    </View>
-  );
-}
-
-function ColorInterpolation({
-  interpolateFunction,
-  color1,
-  color2,
-  title,
-}: {
-  interpolateFunction: (c1: string, c2: string, p: number) => string;
-  color1: string;
-  color2: string;
-  title: string;
-}) {
-  const progress = useSharedValue(0);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: interpolateFunction(color1, color2, progress.value),
-    };
-  }, [color1, color2]);
-
-  return (
-    <View>
-      <Text>{title}:</Text>
-      <View style={styles.colorContainer}>
-        <View style={[styles.box, { backgroundColor: color1 }]} />
-        <View style={styles.spacer} />
-
-        {new Array(11)
-          .fill(null)
-          .map((_, i) => i / 10)
-          .map((p) => (
-            <View
-              key={'' + p}
-              style={[
-                styles.box,
-                { backgroundColor: interpolateFunction(color1, color2, p) },
-              ]}
-            />
-          ))}
-
-        <View style={styles.spacer} />
-
-        <View style={[styles.box, { backgroundColor: color2 }]} />
-      </View>
-      <View style={styles.colorContainer}>
-        <Animated.View style={[styles.bigbox, animatedStyle]} />
-        <Button
-          onPress={() => {
-            progress.value = withTiming(1 - progress.value, { duration: 1000 });
-          }}
-          title="run animation"
-        />
-      </View>
-    </View>
-  );
-}
+import React from 'react';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 function rgbInterpolation(color1: string, color2: string, progress: number) {
   'worklet';
@@ -139,64 +46,71 @@ function hsvStarInterpolation(
   return interpolateColor(progress, [0, 1], [color1, color2], 'HSV');
 }
 
+const interpolateFunction = hsvInterpolation;
+
 export default function ColorInterpolationExample() {
-  const [color1, setColor1] = useState('#ff0000');
-  const [color2, setColor2] = useState('#00ffff');
-  const [color1Text, setColor1Text] = useState('#ff0000');
-  const [color2Text, setColor2Text] = useState('#00ffff');
+  const sourceColor = '#ff0000';
+  const targetColor = '#00ffff';
 
-  const onChangeColor1 = (color: string) => {
-    if (isColor(color)) {
-      setColor1(color);
-    }
-    setColor1Text(color);
-  };
+  const translateX = useSharedValue(0);
+  const context = useSharedValue(0);
+  const progress = useSharedValue(0);
 
-  const onChangeColor2 = (color: string) => {
-    if (isColor(color)) {
-      setColor2(color);
-    }
-    setColor2Text(color);
-  };
+  const pointerPosition = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+    ],
+  }));
+  const gesture = Gesture.Pan()
+  .onStart(() => {
+    context.value = translateX.value;
+  })
+  .onUpdate((event) => {
+    translateX.value = clamp(context.value + event.translationX, 0, 270);
+    progress.value = clamp(translateX.value / 270, 0, 1);
+  });
+
+  const animatedStyle = useAnimatedStyle(() => {
+    translateX.value = progress.value * 270;
+    return {
+      backgroundColor: interpolateFunction(sourceColor, targetColor, progress.value),
+    };
+  });
 
   return (
-    <ScrollView style={styles.container}>
-      <TextInput
-        value={color1Text}
-        onChangeText={onChangeColor1}
-        autoCapitalize="none"
+    <View>
+      <Animated.View style={[styles.colorBox, animatedStyle]} />
+      <Button
+        onPress={() => {
+          const target = progress.value > 0.5 ? 0 : 1;
+          progress.value = withTiming(target, { duration: 1000 });
+        }}
+        title="run animation"
       />
-      <TextInput
-        value={color2Text}
-        onChangeText={onChangeColor2}
-        autoCapitalize="none"
-      />
-      <DefaultInterpolation color1={color1} color2={color2} />
-      <ColorInterpolation
-        color1={color1}
-        color2={color2}
-        interpolateFunction={rgbInterpolation}
-        title="RGB"
-      />
-      <ColorInterpolation
-        color1={color1}
-        color2={color2}
-        interpolateFunction={rgbGammaInterpolation}
-        title="RGB + gamma correction"
-      />
-      <ColorInterpolation
-        color1={color1}
-        color2={color2}
-        interpolateFunction={hsvInterpolation}
-        title="HSV"
-      />
-      <ColorInterpolation
-        color1={color1}
-        color2={color2}
-        interpolateFunction={hsvStarInterpolation}
-        title="HSV*"
-      />
-    </ScrollView>
+      <View style={styles.colorContainer}>
+        <View style={[styles.box, { backgroundColor: sourceColor }]} />
+        <View style={styles.spacer} />
+        <GestureDetector gesture={gesture}>
+          <View style={{flexDirection: 'row'}}>
+          <Animated.View style={[styles.pointer, pointerPosition]} />
+          {new Array(11)
+            .fill(null)
+            .map((_, i) => i / 10)
+            .map((i) => (
+              <View
+                key={'' + i}
+                style={[
+                  styles.box,
+                  { backgroundColor: interpolateFunction(sourceColor, targetColor, i) },
+                ]}
+              />
+            ))}
+          </View>
+        </GestureDetector>
+        <View style={styles.spacer} />
+        <View style={[styles.box, { backgroundColor: targetColor }]} />
+      </View>
+    </View>
   );
 }
 
@@ -208,16 +122,28 @@ const styles = StyleSheet.create({
   colorContainer: {
     flexDirection: 'row',
     padding: 10,
+    justifyContent: 'center',
   },
   box: {
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
   },
-  bigbox: {
-    width: 100,
-    height: 100,
+  colorBox: {
+    width: '100%',
+    height: 200,
   },
   spacer: {
     width: 10,
   },
+  pointer: {
+    position: 'absolute',
+    width: 25,
+    height: 25,
+    backgroundColor: 'black',
+    borderRadius: 25,
+    borderColor: 'white',
+    borderWidth: 2,
+    zIndex: 1,
+    left: -10,
+  }
 });
