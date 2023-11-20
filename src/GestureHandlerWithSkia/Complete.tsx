@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { Dimensions, StyleSheet, useWindowDimensions } from "react-native";
 import { Canvas, Circle, Fill, Line } from "@shopify/react-native-skia";
 import {
-  useDerivedValue,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
@@ -12,27 +11,22 @@ export const Size = 20;
 export const Padding = 10;
 const FgColor = "#DC4C4C";
 const BgColor = "#EC795A";
+const width = Dimensions.get('window').width;
+const startX = width / 2 - (Size * 2 - Padding) + Size;
+const startY = 2 * Size;
 
 export default function GestureHandlerWithSkiaExample() {
-  const { width } = useWindowDimensions();
-
-  const startX = width / 2 - (Size * 2 - Padding) + Size;
-  const startY = 2 * Size;
-  const centerX = useSharedValue(startX);
-  const centerY = useSharedValue(startY);
-
-  const rectCenter = useDerivedValue(() => {
-    return { x: centerX.value, y: centerY.value };
-  });
+  const rectCenter = useSharedValue({ x: startX, y: startY });
 
   const gesture = Gesture.Pan()
     .onChange((e) => {
-      centerX.value += e.changeX;
-      centerY.value += e.changeY;
+      rectCenter.value = {
+        x: startX + e.translationX,
+        y: startY + e.translationY,
+      };
     })
     .onEnd(() => {
-      centerX.value = withSpring(startX);
-      centerY.value = withSpring(startY);
+      rectCenter.value = withSpring({ x: startX, y: startY });
     });
 
   return (
@@ -61,7 +55,7 @@ export default function GestureHandlerWithSkiaExample() {
 
 const styles = StyleSheet.create({
   canvas: {
-    height: 280,
+    height: 400,
     width: "100%" as const,
     backgroundColor: "#FEFEFE" as const,
   },
