@@ -8,7 +8,8 @@ import { NavigationContainer } from '@react-navigation/native';
 // import SharedTransitionExample from './src/SharedElementTransition';
 // import LayoutAnimationListExample from './src/LayoutAnimationList';
 // import AnimatableTextExample from './src/AnimatableText';
-import ColorInterpolationExample from './src/ColorInterpolation';
+// import ColorInterpolationExample from './src/ColorInterpolation';
+import CustomAnimationExample from './src/CustomAnimation';
 
 function App(): JSX.Element {
 
@@ -19,7 +20,8 @@ function App(): JSX.Element {
         <SafeAreaView style={styles.container}>
           {/* <LayoutAnimationListExample /> */}
           {/* <AnimatableTextExample /> */}
-          <ColorInterpolationExample />
+          {/* <ColorInterpolationExample /> */}
+          <CustomAnimationExample />
         </SafeAreaView>
       </NavigationContainer>
     </GestureHandlerRootView>
