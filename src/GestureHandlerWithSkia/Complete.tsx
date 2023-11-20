@@ -1,38 +1,59 @@
-import React from 'react';
+import React from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
-import { Canvas, Circle, Fill } from "@shopify/react-native-skia";
+import { Canvas, Circle, Fill, Line } from "@shopify/react-native-skia";
+import {
+  useDerivedValue,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
-import { useSharedValue, withDecay } from "react-native-reanimated";
 
-const Size = 100;
-const Padding = 20;
+export const Size = 20;
+export const Padding = 10;
+const FgColor = "#DC4C4C";
+const BgColor = "#EC795A";
 
-export default function AnimationWithTouchHandler() {
+export default function GestureHandlerWithSkiaExample() {
   const { width } = useWindowDimensions();
 
-  const translateX = useSharedValue((width - Size - Padding) / 2);
-  const translateY = useSharedValue(40);
+  const startX = width / 2 - (Size * 2 - Padding) + Size;
+  const startY = 2 * Size;
+  const centerX = useSharedValue(startX);
+  const centerY = useSharedValue(startY);
+
+  const rectCenter = useDerivedValue(() => {
+    return { x: centerX.value, y: centerY.value };
+  });
 
   const gesture = Gesture.Pan()
     .onChange((e) => {
-      translateX.value += e.changeX;
-      translateY.value += e.changeY;
+      centerX.value += e.changeX;
+      centerY.value += e.changeY;
     })
-    .onEnd((e) => {
-      const leftBoundary = Size;
-      const rightBoundary = width - Size - Padding;
-      translateX.value = withDecay({
-        velocity: e.velocityX,
-        clamp: [leftBoundary, rightBoundary],
-      });
+    .onEnd(() => {
+      centerX.value = withSpring(startX);
+      centerY.value = withSpring(startY);
     });
 
   return (
     <GestureDetector gesture={gesture}>
       <Canvas style={styles.canvas}>
         <Fill color="white" />
-        <Circle cx={translateX} cy={translateY} r={20} color="#3E3E" />
-        <Circle cx={translateX} cy={translateY} r={15} color="#AEAE" />
+        <Line
+          p1={{ x: width / 2 - (Size - Padding), y: 0 }}
+          p2={rectCenter}
+          color={BgColor}
+          strokeWidth={2}
+          style="fill"
+        />
+        <Circle c={rectCenter} r={Size} color={FgColor} />
+        <Circle
+          c={rectCenter}
+          r={Size}
+          color={BgColor}
+          strokeWidth={5}
+          style="stroke"
+        />
       </Canvas>
     </GestureDetector>
   );
@@ -40,7 +61,7 @@ export default function AnimationWithTouchHandler() {
 
 const styles = StyleSheet.create({
   canvas: {
-    height: 300,
+    height: 280,
     width: "100%" as const,
     backgroundColor: "#FEFEFE" as const,
   },
