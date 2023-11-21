@@ -13,7 +13,7 @@ function App(): JSX.Element {
     <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
-          <Text>Advanced Reanimated Workshop for Shopify</Text>
+          <Text>Advanced Reanimated Workshops for Shopify</Text>
         </SafeAreaView>
       </NavigationContainer>
     </GestureHandlerRootView>
