@@ -2,9 +2,9 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
+  Text,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// import SharedTransitionExample from './src/SharedElementTransition';
 import { NavigationContainer } from '@react-navigation/native';
 
 function App(): JSX.Element {
@@ -12,9 +12,9 @@ function App(): JSX.Element {
   return (
     <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
-        {/* <SafeAreaView style={styles.container}> */}
-          {/* <SharedTransitionExample /> */}
-        {/* </SafeAreaView> */}
+        <SafeAreaView style={styles.container}>
+          <Text>Advanced Reanimated Workshop for Shopify</Text>
+        </SafeAreaView>
       </NavigationContainer>
     </GestureHandlerRootView>
   );
@@ -22,7 +22,9 @@ function App(): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
