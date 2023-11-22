@@ -6,14 +6,26 @@ import {
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
+import SharedTransitionExample from './src/SharedElementTransition';
+import LayoutAnimationListExample from './src/LayoutAnimationList';
+import AnimatableTextExample from './src/AnimatableText';
+import ColorInterpolationExample from './src/ColorInterpolation';
+import CustomAnimationExample from './src/CustomAnimation';
+import GestureHandlerWithSkiaExample from './src/GestureHandlerWithSkia';
 
 function App(): JSX.Element {
 
   return (
     <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
+        {/* <SharedTransitionExample /> */}
         <SafeAreaView style={styles.container}>
           <Text>Advanced Reanimated Workshops for Shopify</Text>
+          {/* <LayoutAnimationListExample /> */}
+          {/* <AnimatableTextExample /> */}
+          {/* <ColorInterpolationExample /> */}
+          {/* <CustomAnimationExample /> */}
+          {/* <GestureHandlerWithSkiaExample /> */}
         </SafeAreaView>
       </NavigationContainer>
     </GestureHandlerRootView>
@@ -23,8 +35,7 @@ function App(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#f2f2f2',
   },
 });
 
