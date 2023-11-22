@@ -6,8 +6,42 @@ import Animated, {
   SlideInRight,
   SlideOutLeft,
 } from 'react-native-reanimated';
+import {
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
 
 export default function LayoutAnimationListExample() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+      />
+      <Stack.Screen
+        name="ListScreen"
+        component={ListScreen}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function HomeScreen({ navigation }: any) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to ListScreen"
+        onPress={() =>
+          navigation.navigate('ListScreen')
+        }
+      />
+    </View>
+  );
+}
+
+function ListScreen() {
   const [show, setShow] = useState(true);
   const [data, setData] = useState([0, 1, 2]);
 

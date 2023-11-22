@@ -2,18 +2,20 @@ import React from 'react';
 import { Button, View } from 'react-native';
 import Animated, { defineAnimation, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 
-function withCircle (
-  toValue: number
-) {
+function withRandom(stepsCount: number) {
   'worklet';
-  return defineAnimation(toValue, () => {
+  return defineAnimation(stepsCount, () => {
     'worklet';
     return {
       type: 'custom',
       onFrame: (animation: any, now: number) => {
-        animation.current = {
-          x: Math.sin(now / 1000) * 100,
-          y: Math.cos(now / 1000) * 100,
+        if (now - animation.lastTimestamp > 80) {
+          animation.lastTimestamp = now;
+          animation.current = Math.random() * 200 - 100;
+          animation.stepsCount--;
+          if (animation.stepsCount < 1) {
+            return true;
+          }
         }
         return false
       },
@@ -23,27 +25,32 @@ function withCircle (
         _now: number,
         _previousAnimation: any,
       ) => {},
-      toValue,
-      current: toValue,
+      stepsCount: stepsCount,
+      lastTimestamp: 0,
+      current: Math.random() * 200 - 100,
     };
   });
 };
 
 
+
+
 export default function CustomAnimationExample() {
-  const position = useSharedValue({ x: 0, y: 0 });
+  const translationX = useSharedValue(0);
+  const translationY = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
-        { translateX: position.value.x },
-        { translateY: position.value.y },
+        { translateX: translationX.value },
+        { translateY: translationY.value },
       ]
     };
   });
 
   return <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
     <Button title="Run custom Animation" onPress={() => {
-      position.value = withCircle(1) as any;
+      translationX.value = withRandom(10) as any;
+      translationY.value = withRandom(10) as any;
     }} />
     <Animated.View 
       style={[
