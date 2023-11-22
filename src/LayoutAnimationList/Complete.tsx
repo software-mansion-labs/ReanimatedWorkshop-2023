@@ -66,7 +66,7 @@ function ListScreen() {
         }
       />
       {show && (
-        <LayoutAnimationConfig skipEntering={true}>
+        <LayoutAnimationConfig skipEntering skipExiting>
         <Animated.FlatList
           // skipEnteringExitingAnimations
           style={styles.container}

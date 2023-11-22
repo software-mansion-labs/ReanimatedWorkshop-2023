@@ -2,6 +2,7 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
+  Text,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
@@ -17,14 +18,15 @@ function App(): JSX.Element {
   return (
     <GestureHandlerRootView style={styles.container}>
       <NavigationContainer>
-        <SharedTransitionExample />
-        {/* <SafeAreaView style={styles.container}> */}
+        {/* <SharedTransitionExample /> */}
+        <SafeAreaView style={styles.container}>
+          <Text>Advanced Reanimated Workshops for Shopify</Text>
           {/* <LayoutAnimationListExample /> */}
           {/* <AnimatableTextExample /> */}
           {/* <ColorInterpolationExample /> */}
           {/* <CustomAnimationExample /> */}
           {/* <GestureHandlerWithSkiaExample /> */}
-        {/* </SafeAreaView> */}
+        </SafeAreaView>
       </NavigationContainer>
     </GestureHandlerRootView>
   );
@@ -32,7 +34,10 @@ function App(): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#f2f2f2',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

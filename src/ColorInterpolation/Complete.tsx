@@ -46,7 +46,7 @@ function hsvStarInterpolation(
   return interpolateColor(progress, [0, 1], [color1, color2], 'HSV');
 }
 
-const interpolateFunction = hsvInterpolation;
+const interpolateFunction = rgbGammaInterpolation;
 
 export default function ColorInterpolationExample() {
   const sourceColor = '#ff0000';
